@@ -91,8 +91,8 @@ def center_crop(x, crop_h, crop_w,
   h, w = x.shape[:2]
   j = int(round((h - crop_h)/2.))
   i = int(round((w - crop_w)/2.))
-  im = Image.fromarray(x[j:j+crop_h, i:i+crop_w])
-  return np.array(im.resize([resize_h, resize_w]), PIL.Image.BILINEAR)
+  im = Image.fromarray(x[j:j+crop_h, i:i+crop_w].astype('uint8'))
+  return np.array(im.resize([resize_h, resize_w], Image.BILINEAR))
 
 def transform(image, input_height, input_width, 
               resize_height=64, resize_width=64, crop=True):
@@ -102,7 +102,7 @@ def transform(image, input_height, input_width,
       resize_height, resize_width)
   else:
     im = Image.fromarray(image[j:j+crop_h, i:i+crop_w])
-  return np.array(im.resize([resize_h, resize_w]), PIL.Image.BILINEAR)/127.5 - 1.
+  return cropped_image/127.5-1.
 
 def inverse_transform(images):
   return (images+1.)/2.
